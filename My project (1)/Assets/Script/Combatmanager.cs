@@ -6,6 +6,9 @@ using UnityEngine;
 public class Combatmanager : MonoBehaviour
 {
     public Animator anim;
+    public Transform attackpoint;
+    public float attackrange = 0.5f;
+    public LayerMask enemylayer;
 
     public bool isAttacking = false;
 
@@ -25,15 +28,30 @@ public class Combatmanager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Attack();
+        if (Input.GetKeyDown(KeyCode.J) && !isAttacking)
+        {
+            Attack();
+        }
     }
 
     void Attack()
     {
-        if (Input.GetKeyDown(KeyCode.J) && !isAttacking)
+        isAttacking = true;
+
+        Collider2D[] hit = Physics2D.OverlapCircleAll(attackpoint.position, attackrange,enemylayer );
+
+        foreach (Collider2D enemy in hit)
         {
-            isAttacking = true;
-            Debug.Log("Test");
+            Debug.Log("Hit");
         }
     }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(attackpoint.position,attackrange);
+    }
+    
+    
+    
+    
 }

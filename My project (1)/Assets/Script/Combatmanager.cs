@@ -14,6 +14,10 @@ public class Combatmanager : MonoBehaviour
 
     public static Combatmanager instace;
 
+    public Enemy Enemy;
+
+    public int dam = 5;
+
     private void Awake()
     {
         instace = this;
@@ -42,16 +46,8 @@ public class Combatmanager : MonoBehaviour
 
         foreach (Collider2D enemy in hit)
         {
-            Debug.Log("Hit");
+            enemy.GetComponent<Enemy>().TakeDam(dam);
         }
     }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(attackpoint.position,attackrange);
-    }
-    
-    
-    
     
 }

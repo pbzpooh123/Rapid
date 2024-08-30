@@ -1,19 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Playerhp : MonoBehaviour
 {
-    public int maxhp = 100;
-    private int curhp;
+    public float maxhp = 100f;
+    private float curhp;
+    public Image hpBar;
+
     void Start()
     {
         curhp = maxhp;
     }
 
-    public void TakeDam(int dam)
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            TakeDam(20);
+        }
+    }
+
+    public void TakeDam(float dam)
     {
         curhp -= dam;
+        hpBar.fillAmount = curhp / 100f;
 
         if (curhp <= 0)
         {

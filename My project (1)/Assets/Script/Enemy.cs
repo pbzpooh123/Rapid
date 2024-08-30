@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class Enemy : MonoBehaviour
     private bool isMovingBack = false;
     private bool isAttacking = false;
     private bool isJumping = false;
+    public Image healthBar;
 
     private Rigidbody2D rb;
 
@@ -29,6 +31,7 @@ public class Enemy : MonoBehaviour
     public void TakeDam(int dam)
     {
         curhp -= dam;
+        healthBar.fillAmount = curhp / 100f;
 
         if (curhp <= 0)
         {
@@ -44,6 +47,11 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.G))            //---- For Check HpBar na kub -----// --- Alikato
+        {
+            TakeDam(20);
+        }
+
         if (!isAttacking)  // Prevent movement while attacking
         {
             float distanceToPlayer = Vector2.Distance(transform.position, player.position);

@@ -22,7 +22,7 @@ public class Playerhp : MonoBehaviour
         }
     }
 
-    public void TakeDam(float dam)
+    public void TakeDam(int dam)
     {
         curhp -= dam;
         hpBar.fillAmount = curhp / 100f;

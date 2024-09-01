@@ -21,6 +21,8 @@ public class Enemy : MonoBehaviour
     public Image healthBar;
 
     private Rigidbody2D rb;
+    public Playerhp php;
+    public int dam = 5;
 
     void Start()
     {
@@ -31,7 +33,7 @@ public class Enemy : MonoBehaviour
     public void TakeDam(int dam)
     {
         curhp -= dam;
-        healthBar.fillAmount = curhp / 100f;
+        healthBar.fillAmount = curhp / 300f;
 
         if (curhp <= 0)
         {
@@ -116,7 +118,7 @@ public class Enemy : MonoBehaviour
         isAttacking = true;
         rb.velocity = Vector2.zero;  // Stop movement during attack
         // Play attack animation and deal damage
-        Debug.Log("Enemy Attacking");
+        php.TakeDam(dam);
         Invoke("ResetAttack", 5f); // Simulate attack cooldown
     }
 

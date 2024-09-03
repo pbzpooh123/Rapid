@@ -21,6 +21,15 @@ public class Playerhp : MonoBehaviour
             TakeDam(20);
         }
     }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            GetComponent<combat>().InterruptCombo();
+            Debug.Log("Player hit by enemy! Combo interrupted.");
+        }
+    }
+
 
     public void TakeDam(int dam)
     {

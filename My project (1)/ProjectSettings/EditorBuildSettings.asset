@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Menu.unity
     guid: 924aae08456243f44b31e1a16acd7786
   - enabled: 1
+    path: Assets/Scenes/beforeboss.unity
+    guid: e9faab5da7020024493836083856dbef
+  - enabled: 1
     path: Assets/Scenes/rapid.unity
     guid: 0fd0f2d4a9615b847b9dbfb539246b42
   m_configObjects: {}

@@ -9,6 +9,9 @@ public class Playerhp : MonoBehaviour
     private float curhp;
     public Image hpBar;
 
+    private bool isdead;
+    public GameOver gameManager;
+
     void Start()
     {
         curhp = maxhp;
@@ -20,6 +23,8 @@ public class Playerhp : MonoBehaviour
         {
             TakeDam(20);
         }
+
+        Invoke("Over", 2);
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -46,5 +51,6 @@ public class Playerhp : MonoBehaviour
     {
         GetComponent<Collider2D>().enabled = false;
         this.enabled = false;
+        gameManager.gameOver();
     }
 }

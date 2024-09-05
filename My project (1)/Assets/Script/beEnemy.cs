@@ -18,7 +18,6 @@ public class beEnemy : MonoBehaviour
     private bool isMovingBack = false;
     private bool isAttacking = false;
     private bool isJumping = false;
-    public HealthBarEnemynormal healthBar;
 
     private Rigidbody2D rb;
     public Playerhp php;

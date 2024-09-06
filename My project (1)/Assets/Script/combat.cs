@@ -2,138 +2,82 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class combat : MonoBehaviour
+public class Combat : MonoBehaviour
 {
-    public Animator anim;
-    public Transform attackpoint;
-    public float attackrange = 0.5f;
-    public LayerMask enemylayer;
+    public float dashSpeed = 20f;        // Speed of the dash
+    public float dashDuration = 0.2f;    // How long the dash lasts
+    public float dashCooldown = 1f;      // Time before another dash can be used
+    public int dashDamage = 20;          // Damage dealt to enemies on collision
 
-    public bool isAttacking = false;
-    public bool isHAttacking = false;
+    private Rigidbody2D rb;              // Reference to the Rigidbody2D
+    private bool isDashing;              // Check if the player is dashing
+    private float dashTime;              // Tracks dash time
+    private float dashCooldownTimer;     // Tracks cooldown time
 
-    public static combat instance;
-
-    public int baseDamage = 5; // Base damage
-    public int attackCounter = 0; // Counter for consecutive attacks
-    public int maxCounter = 2; // Maximum number of consecutive attacks before reset
-    private float attackResetTime = 1.0f; // Time to reset the attack counter
-    private float lastAttackTime = 0f; // Time of the last attack input
-    private float attackCooldown = 0.1f; // Cooldown time in seconds to prevent double input
-    private float nextAttackTime = 0f;
-
-    // Array of animation triggers for each combo stage
-    private string[] comboTriggers = { "Attack1", "Attack2" }; // Add more if needed
-
-    private void Awake()
+    void Start()
     {
-        instance = this;
+        // Get the Rigidbody2D component
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void Update()
     {
-        HandleComboInput();
-        CheckComboTimeout();
-    }
-
-    private void HandleComboInput()
-    {
-        // Handle light attack input
-        if (Input.GetMouseButtonDown(0) && !isAttacking && Time.time >= nextAttackTime)
+        // Dash input (left mouse button)
+        if (Input.GetMouseButtonDown(0) && !isDashing && dashCooldownTimer <= 0)
         {
-            nextAttackTime = Time.time + attackCooldown; // Set the next allowed attack time
-            lastAttackTime = Time.time; // Update the last attack time
-            StartCoroutine(Attack());
+            Debug.Log("Dash started");
+            StartDash();
         }
 
-        // Handle heavy attack input
-        if (Input.GetMouseButtonDown(1) && !isHAttacking && Time.time >= nextAttackTime)
+        // Handle dashing state
+        if (isDashing)
         {
-            nextAttackTime = Time.time + attackCooldown; // Set the next allowed attack time
-            StartCoroutine(HAttack());
+            dashTime -= Time.deltaTime;
+
+            if (dashTime <= 0)
+            {
+                StopDash();
+            }
         }
-    }
-
-    IEnumerator Attack()
-    {
-        if (isAttacking) yield break; // Exit if already attacking
-
-        isAttacking = true;
-
-        // Determine the animation trigger based on the attack counter
-        string trigger = comboTriggers[attackCounter % comboTriggers.Length];
-        anim.SetTrigger(trigger);
-
-        // Calculate damage based on attack counter
-        int damage = baseDamage + (attackCounter * 2);
-        Debug.Log("Light Attack Damage: " + damage); // Log damage amount
-        // Increase damage with attack counter
-
-        yield return new WaitForSeconds(0.1f); // Wait before registering the hit
-
-        Collider2D[] hit = Physics2D.OverlapCircleAll(attackpoint.position, attackrange, enemylayer);
-
-        foreach (Collider2D enemy in hit)
+        else
         {
-            enemy.GetComponent<Enemy>().TakeDam(damage);
-        }
-
-        // Increment attack counter
-        attackCounter++;
-        if (attackCounter >= maxCounter) attackCounter = 0; // Reset counter if max is reached
-
-        yield return new WaitForSeconds(0.1f); // Adjust this to the length of your attack animation
-
-        isAttacking = false; // Reset the attack state
-    }
-
-    IEnumerator HAttack()
-    {
-        isHAttacking = true;
-        anim.SetTrigger("HAttack"); // Trigger heavy attack animation
-
-        yield return new WaitForSeconds(0.2f); // Wait a short delay before registering the hit, adjust as needed
-
-        Collider2D[] hit = Physics2D.OverlapCircleAll(attackpoint.position, attackrange, enemylayer);
-
-        foreach (Collider2D enemy in hit)
-        {
-            enemy.GetComponent<Enemy>().TakeDam(baseDamage);
-        }
-
-        yield return new WaitForSeconds(1.0f); // Wait for heavy attack cooldown or until animation ends
-
-        isHAttacking = false; // Reset the heavy attack state
-    }
-
-    private void CheckComboTimeout()
-    {
-        // Only reset the combo if enough time has passed since the last attack
-        if (Time.time - lastAttackTime > attackResetTime && attackCounter > 0)
-        {
-            ResetCombo();
+            // Reduce cooldown timer
+            if (dashCooldownTimer > 0)
+                dashCooldownTimer -= Time.deltaTime;
         }
     }
 
-    public void InterruptCombo()
+    void StartDash()
     {
-        ResetCombo();
+        isDashing = true;
+        dashTime = dashDuration;
+        dashCooldownTimer = dashCooldown;
+
+        // Apply dash velocity in the forward direction of the player
+        Vector2 dashDirection = transform.right * transform.localScale.x; // Use transform.right for 2D right direction
+        rb.velocity = dashDirection * dashSpeed;
     }
 
-    private void ResetCombo()
+    void StopDash()
     {
-        isAttacking = false;
-        attackCounter = 0;
-        Debug.Log("Combo Interrupted or Timed Out");
+        isDashing = false;
+        rb.velocity = Vector2.zero; // Reset the velocity to stop immediately
     }
 
-    private void OnDrawGizmosSelected()
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        if (attackpoint == null)
+        if (isDashing)
         {
-            return;
+            // Check if the collision is with an enemy
+            if (collision.gameObject.CompareTag("Enemy"))
+            {
+                // Access the enemy's health component and deal damage
+                Enemy enemyHealth = collision.gameObject.GetComponent<Enemy>();
+                if (enemyHealth != null)
+                {
+                    enemyHealth.TakeDam(dashDamage); // Fixed the method name to 'TakeDamage'
+                }
+            }
         }
-
-        Gizmos.DrawWireSphere(attackpoint.position, attackrange);
     }
 }

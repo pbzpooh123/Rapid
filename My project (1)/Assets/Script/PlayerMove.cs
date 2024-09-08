@@ -1,101 +1,78 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
     [SerializeField] private float speed;
     private Rigidbody2D body;
-    private bool grounded;
-    [SerializeField] private LayerMask groundlayer;
-    private BoxCollider2D boxcollider;
+    private BoxCollider2D boxCollider;
     private bool canDash = true;
-    private bool isDash;
-    private float dashpower = 20f;
-    private int dashdam = 20;
+    private bool isDashing;
+    private float dashPower = 20f;
+    private int dashDamage = 20;
     private float dashTime = 0.2f;
-    private float dashCooldown = 1f;
+    private float dashCooldown = 0.2f;
+    public Transform attackpos;
+    public float attackrange;
+    public LayerMask enemy;
+   
 
-    [SerializeField] private TrailRenderer tr;
+    [SerializeField] private TrailRenderer trailRenderer;
 
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
-        boxcollider = GetComponent<BoxCollider2D>();
+        boxCollider = GetComponent<BoxCollider2D>();
+
+        // Set Rigidbody to continuous collision detection
+        body.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (isDash)
+        if (isDashing)
         {
             return;
         }
-        float horizontalinput = Input.GetAxis("Horizontal");
-        body.velocity = new (Input.GetAxis("Horizontal") * 0,body.velocity.y);
+        float horizontalInput = Input.GetAxis("Horizontal");
+        body.velocity = new Vector2(0 * speed, body.velocity.y);
 
-        if (horizontalinput > 0.01f)
+        if (horizontalInput > 0.01f)
         {
             transform.localScale = Vector3.one;
         }
-        else if (horizontalinput < -0.01f)
+        else if (horizontalInput < -0.01f)
         {
             transform.localScale = new Vector3(-1, 1, 1);
         }
-
-        if (Input.GetKey(KeyCode.Space) && isGrounded())
-        {
-            Jump();
-        }
+        
         
         if (Input.GetMouseButtonDown(0) && canDash)
         {
             StartCoroutine(Dash());
+            
         }
-        
-    }
-
-    void Jump()
-    {
-            body.velocity = new Vector2(body.velocity.x, speed * 1.5f);
-            grounded = false;
     }
     
-
-    private bool isGrounded()
-    {
-        RaycastHit2D raycastHit = Physics2D.BoxCast(boxcollider.bounds.center,boxcollider.bounds.size,0,Vector2.down,0.1f,groundlayer);
-        return raycastHit.collider != null;
-    }
 
     private IEnumerator Dash()
     {
         canDash = false;
-        isDash = true;
-        body.velocity = new Vector2(transform.localScale.x * dashpower,0f);
-        tr.emitting = true;
+        isDashing = true;
+        body.velocity = new Vector2(transform.localScale.x * dashPower, 0f);
+        trailRenderer.emitting = true;
         yield return new WaitForSeconds(dashTime);
-        tr.emitting = false;
-        isDash = false;
+        trailRenderer.emitting = false;
+        isDashing = false;
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
-    }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (isDash)
+        Collider2D[] enemydam = Physics2D.OverlapCircleAll(attackpos.position,attackrange,enemy);
+        for (int i = 0; i < enemydam.Length; i++)
         {
-            // Check if the collision is with an enemy
-            if (collision.gameObject.CompareTag("Enemy"))
-            {
-                // Access the enemy's health component and deal damage
-                Enemy enemyHealth = collision.gameObject.GetComponent<Enemy>();
-                if (enemyHealth != null)
-                {
-                    enemyHealth.TakeDam(dashdam); // Fixed the method name to 'TakeDamage'
-                }
-            }
+            enemydam[i].GetComponent<beEnemy>().TakeDam(dashDamage);
         }
     }
+    
+   
 }

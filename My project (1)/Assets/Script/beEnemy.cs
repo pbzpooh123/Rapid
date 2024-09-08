@@ -22,16 +22,26 @@ public class beEnemy : MonoBehaviour
     private Rigidbody2D rb;
     public Playerhp php;
     public int dam = 5;
+    [SerializeField] private floatingbar heathbar;
 
-    void Start()
+    private void Awake()
     {
         curhp = maxhp;
         rb = GetComponent<Rigidbody2D>();
+        heathbar = GetComponentInChildren<floatingbar>();
+    }
+
+    void Start()
+    {
+      
+        heathbar.UpdateHeathbar(curhp,maxhp);
+       
     }
 
     public void TakeDam(int dam)
     {
         curhp -= dam;
+        heathbar.UpdateHeathbar(curhp,maxhp);
 
         if (curhp <= 0)
         {
@@ -43,6 +53,7 @@ public class beEnemy : MonoBehaviour
     {
         GetComponent<Collider2D>().enabled = false;
         this.enabled = false;
+        Destroy(this);
     }
 
     private void Update()

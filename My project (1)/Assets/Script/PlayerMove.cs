@@ -11,13 +11,10 @@ public class PlayerMove : MonoBehaviour
     private float dashPower = 20f;
     private int dashDamage = 20;
     private float dashTime = 0.2f;
-    private float dashCooldown = 0.2f;
+    private float dashCooldown = 1f;
     public Transform attackpos;
     public float attackrange;
     public LayerMask enemy;
-   
-
-    [SerializeField] private TrailRenderer trailRenderer;
 
     private void Awake()
     {
@@ -45,34 +42,50 @@ public class PlayerMove : MonoBehaviour
         {
             transform.localScale = new Vector3(-1, 1, 1);
         }
-        
-        
+
         if (Input.GetMouseButtonDown(0) && canDash)
         {
             StartCoroutine(Dash());
-            
         }
     }
-    
 
     private IEnumerator Dash()
     {
         canDash = false;
         isDashing = true;
         body.velocity = new Vector2(transform.localScale.x * dashPower, 0f);
-        trailRenderer.emitting = true;
         yield return new WaitForSeconds(dashTime);
-        trailRenderer.emitting = false;
         isDashing = false;
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
 
-        Collider2D[] enemydam = Physics2D.OverlapCircleAll(attackpos.position,attackrange,enemy);
-        for (int i = 0; i < enemydam.Length; i++)
+        // Detect all enemies within the attack range once
+        Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(attackpos.position, attackrange, enemy);
+
+        // Apply damage to all detected enemies based on their type
+        foreach (Collider2D enemyCollider in enemiesInRange)
         {
-            enemydam[i].GetComponent<beEnemy>().TakeDam(dashDamage);
+            // Check for each type and apply damage accordingly
+            beEnemy beEnemyComponent = enemyCollider.GetComponent<beEnemy>();
+            if (beEnemyComponent != null)
+            {
+                beEnemyComponent.TakeDam(dashDamage);
+                continue; // Continue to next enemy if the component was found
+            }
+
+            Enemy enemyComponent = enemyCollider.GetComponent<Enemy>();
+            if (enemyComponent != null)
+            {
+                enemyComponent.TakeDam(dashDamage);
+                continue;
+            }
+
+            // If you have a third enemy type, add additional checks here
+            rangedenemy thirdEnemyComponent = enemyCollider.GetComponent<rangedenemy>();
+            if (thirdEnemyComponent != null)
+            {
+                thirdEnemyComponent.TakeDam(dashDamage);
+            }
         }
     }
-    
-   
 }

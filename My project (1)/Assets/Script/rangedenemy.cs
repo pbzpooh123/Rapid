@@ -1,11 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class Enemy : MonoBehaviour
+public class rangedenemy : MonoBehaviour
 {
     public int maxhp = 100;
     private int curhp;
@@ -18,22 +15,35 @@ public class Enemy : MonoBehaviour
     private bool isMovingBack = false;
     private bool isAttacking = false;
     private bool isJumping = false;
-    public Image healthBar;
 
     private Rigidbody2D rb;
-    public Playerhp php;
     public int dam = 5;
+    [SerializeField] private floatingbar heathbar;
 
-    void Start()
+    // Reference to the projectile prefab
+    public GameObject projectilePrefab;
+    public float projectileSpeed = 10f;
+    public float attackCooldown = 5f;
+
+    // Reference to the projectile spawn point (above the head)
+    public Transform projectileSpawnPoint; 
+
+    private void Awake()
     {
         curhp = maxhp;
         rb = GetComponent<Rigidbody2D>();
+        heathbar = GetComponentInChildren<floatingbar>();
+    }
+
+    void Start()
+    {
+        heathbar.UpdateHeathbar(curhp, maxhp);
     }
 
     public void TakeDam(int dam)
     {
         curhp -= dam;
-        healthBar.fillAmount = curhp / 300f;
+        heathbar.UpdateHeathbar(curhp, maxhp);
 
         if (curhp <= 0)
         {
@@ -50,12 +60,12 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.G))            //---- For Check HpBar na kub -----// --- Alikato
+        if (Input.GetKeyDown(KeyCode.G)) // For testing damage
         {
             TakeDam(20);
         }
 
-        if (!isAttacking)  // Prevent movement while attacking
+        if (!isAttacking) // Prevent movement while attacking
         {
             float distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
@@ -117,15 +127,27 @@ public class Enemy : MonoBehaviour
     private void Attack()
     {
         isAttacking = true;
-        rb.velocity = Vector2.zero;  // Stop movement during attack
-        // Play attack animation and deal damage
-        php.TakeDam(dam);
-        Invoke("ResetAttack", 5f); // Simulate attack cooldown
+        rb.velocity = Vector2.zero; // Stop movement during attack
+        LaunchProjectile();
+        Invoke("ResetAttack", attackCooldown); // Simulate attack cooldown
+    }
+
+    private void LaunchProjectile()
+    {
+        // Instantiate the projectile at the spawn point above the head
+        GameObject projectile = Instantiate(projectilePrefab, projectileSpawnPoint.position, Quaternion.identity);
+
+        // Calculate direction towards the player
+        Vector2 direction = (player.position - transform.position).normalized;
+
+        // Set projectile velocity
+        Rigidbody2D projectileRb = projectile.GetComponent<Rigidbody2D>();
+        projectileRb.velocity = direction * projectileSpeed;
     }
 
     private void ResetAttack()
     {
-        isAttacking = false;  // Reset attack state
+        isAttacking = false; // Reset attack state
     }
 
     private void Idle()
@@ -137,7 +159,7 @@ public class Enemy : MonoBehaviour
     {
         isJumping = true;
         rb.AddForce(Vector2.up * 5f, ForceMode2D.Impulse);
-        Invoke("ResetJump", 1f);  // Prevent constant jumping
+        Invoke("ResetJump", 1f); // Prevent constant jumping
     }
 
     private void ResetJump()

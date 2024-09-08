@@ -49,7 +49,7 @@ GameObject:
   - component: {fileID: 4665299701614849549}
   m_Layer: 7
   m_Name: Mainchar
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -155,8 +155,6 @@ MonoBehaviour:
   enemy:
     serializedVersion: 2
     m_Bits: 64
-  attackpoint: {fileID: 205997670657278784}
-  trailRenderer: {fileID: 4665299701614849549}
 --- !u!95 &2329619507263918567
 Animator:
   serializedVersion: 5
@@ -289,8 +287,8 @@ TrailRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -765247245
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Time: 0.5
   m_PreviewTimeScale: 1
@@ -361,5 +359,5 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_MaskInteraction: 0
   m_Autodestruct: 0
-  m_Emitting: 0
+  m_Emitting: 1
   m_ApplyActiveColorSpace: 1

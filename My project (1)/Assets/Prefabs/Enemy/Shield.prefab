@@ -102,8 +102,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxhp: 100
   player: {fileID: 1610539658135876595, guid: b750e84c9068a104daec451378d6feca, type: 3}
-  moveSpeed: 2
-  detectionRange: 5
+  moveSpeed: 5
+  detectionRange: 50
   attackRange: 2
   jumpProbability: 0
   php: {fileID: 4011392260622039212, guid: b750e84c9068a104daec451378d6feca, type: 3}

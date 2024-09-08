@@ -53,7 +53,7 @@ public class beEnemy : MonoBehaviour
     {
         GetComponent<Collider2D>().enabled = false;
         this.enabled = false;
-        Destroy(this);
+        Destroy(gameObject);
     }
 
     private void Update()

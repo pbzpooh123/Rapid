@@ -43,5 +43,6 @@ public class Playerhp : MonoBehaviour
         GetComponent<Collider2D>().enabled = false;
         this.enabled = false;
         gameManager.gameOver();
+        Destroy(gameObject);
     }
 }

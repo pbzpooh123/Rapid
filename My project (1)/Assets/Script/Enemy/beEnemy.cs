@@ -1,8 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class rangedenemy : MonoBehaviour
+public class beEnemy : MonoBehaviour
 {
     public int maxhp = 100;
     private int curhp;
@@ -10,22 +13,15 @@ public class rangedenemy : MonoBehaviour
     public float moveSpeed = 2f;
     public float detectionRange = 5f;
     public float attackRange = 2f;
-    public float jumpProbability = 0.1f; // Chance to jump
-
     private bool isMovingBack = false;
     private bool isAttacking = false;
-    private bool isJumping = false;
-
     private Rigidbody2D rb;
+    public Playerhp php;
     public int dam = 5;
     [SerializeField] private floatingbar heathbar;
-
-    // Reference to the projectile prefab
     public GameObject projectilePrefab;
     public float projectileSpeed = 10f;
     public float attackCooldown = 5f;
-
-    // Reference to the projectile spawn point (above the head)
     public Transform projectileSpawnPoint; 
 
     private void Awake()
@@ -37,17 +33,20 @@ public class rangedenemy : MonoBehaviour
 
     void Start()
     {
-        heathbar.UpdateHeathbar(curhp, maxhp);
+      
+        heathbar.UpdateHeathbar(curhp,maxhp);
+       
     }
 
     public void TakeDam(int dam)
     {
         curhp -= dam;
-        heathbar.UpdateHeathbar(curhp, maxhp);
+        heathbar.UpdateHeathbar(curhp,maxhp);
 
         if (curhp <= 0)
         {
             Die();
+            LaunchDrvoe();
         }
     }
 
@@ -60,12 +59,12 @@ public class rangedenemy : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.G)) // For testing damage
+        if (Input.GetKeyDown(KeyCode.G))            //---- For Check HpBar na kub -----// --- Alikato
         {
             TakeDam(20);
         }
 
-        if (!isAttacking) // Prevent movement while attacking
+        if (!isAttacking)  // Prevent movement while attacking
         {
             float distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
@@ -88,14 +87,6 @@ public class rangedenemy : MonoBehaviour
             else
             {
                 Idle();
-            }
-
-            float randomValue = UnityEngine.Random.Range(0f, 1f);
-
-            // Occasionally jump randomly
-            if (!isJumping && randomValue < jumpProbability)
-            {
-                Jump();
             }
         }
     }
@@ -127,12 +118,23 @@ public class rangedenemy : MonoBehaviour
     private void Attack()
     {
         isAttacking = true;
-        rb.velocity = Vector2.zero; // Stop movement during attack
-        LaunchProjectile();
-        Invoke("ResetAttack", attackCooldown); // Simulate attack cooldown
+        rb.velocity = Vector2.zero;  // Stop movement during attack
+        // Play attack animation and deal damage
+        php.TakeDam(dam);
+        Invoke("ResetAttack", 5f); // Simulate attack cooldown
     }
 
-    private void LaunchProjectile()
+    private void ResetAttack()
+    {
+        isAttacking = false;  // Reset attack state
+    }
+
+    private void Idle()
+    {
+        rb.velocity = new Vector2(0, rb.velocity.y);
+    }
+    
+    private void LaunchDrvoe()
     {
         // Instantiate the projectile at the spawn point above the head
         GameObject projectile = Instantiate(projectilePrefab, projectileSpawnPoint.position, Quaternion.identity);
@@ -145,25 +147,5 @@ public class rangedenemy : MonoBehaviour
         projectileRb.velocity = direction * projectileSpeed;
     }
 
-    private void ResetAttack()
-    {
-        isAttacking = false; // Reset attack state
-    }
-
-    private void Idle()
-    {
-        rb.velocity = new Vector2(0, rb.velocity.y);
-    }
-
-    private void Jump()
-    {
-        isJumping = true;
-        rb.AddForce(Vector2.up * 5f, ForceMode2D.Impulse);
-        Invoke("ResetJump", 1f); // Prevent constant jumping
-    }
-
-    private void ResetJump()
-    {
-        isJumping = false;
-    }
+   
 }

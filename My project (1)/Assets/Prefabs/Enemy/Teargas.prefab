@@ -148,7 +148,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.42719483, y: 0.033505797}
+  m_Offset: {x: -0.42719483, y: 0.3525859}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -159,7 +159,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.1098213, y: 4.928748}
+  m_Size: {x: 1.1098213, y: 2.71198}
   m_EdgeRadius: 0
 --- !u!114 &831301415260256262
 MonoBehaviour:
@@ -178,13 +178,13 @@ MonoBehaviour:
   moveSpeed: 2
   detectionRange: 50
   attackRange: 20
-  jumpProbability: 0
-  dam: 5
+  dam: 15
   heathbar: {fileID: 0}
   projectilePrefab: {fileID: 3360590867701645902, guid: 93ef50ad35ec43e489c8cf8c41215588, type: 3}
   projectileSpeed: 30
-  attackCooldown: 2
+  attackCooldown: 10
   projectileSpawnPoint: {fileID: 6053135440646952026}
+  drovePrefab: {fileID: 4570013366872051747, guid: 7ff64c1601cc8e840be6a4b5da3b59c8, type: 3}
 --- !u!1 &2667128636644921788
 GameObject:
   m_ObjectHideFlags: 0

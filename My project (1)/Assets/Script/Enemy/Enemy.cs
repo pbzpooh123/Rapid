@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class beEnemy : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
     public int maxhp = 100;
     private int curhp;
@@ -13,39 +13,32 @@ public class beEnemy : MonoBehaviour
     public float moveSpeed = 2f;
     public float detectionRange = 5f;
     public float attackRange = 2f;
-    public float jumpProbability = 0.1f; // Chance to jump
-
     private bool isMovingBack = false;
     private bool isAttacking = false;
-    private bool isJumping = false;
+    public Image healthBar;
+
+    public Victory win;
 
     private Rigidbody2D rb;
     public Playerhp php;
     public int dam = 5;
-    [SerializeField] private floatingbar heathbar;
-
-    private void Awake()
-    {
-        curhp = maxhp;
-        rb = GetComponent<Rigidbody2D>();
-        heathbar = GetComponentInChildren<floatingbar>();
-    }
+    
 
     void Start()
     {
-      
-        heathbar.UpdateHeathbar(curhp,maxhp);
-       
+        curhp = maxhp;
+        rb = GetComponent<Rigidbody2D>();
     }
 
     public void TakeDam(int dam)
     {
         curhp -= dam;
-        heathbar.UpdateHeathbar(curhp,maxhp);
+        healthBar.fillAmount = curhp / 300f;
 
         if (curhp <= 0)
         {
             Die();
+            
         }
     }
 
@@ -53,6 +46,7 @@ public class beEnemy : MonoBehaviour
     {
         GetComponent<Collider2D>().enabled = false;
         this.enabled = false;
+        win.Credits();
         Destroy(gameObject);
     }
 
@@ -86,14 +80,6 @@ public class beEnemy : MonoBehaviour
             else
             {
                 Idle();
-            }
-
-            float randomValue = UnityEngine.Random.Range(0f, 1f);
-
-            // Occasionally jump randomly
-            if (!isJumping && randomValue < jumpProbability)
-            {
-                Jump();
             }
         }
     }
@@ -140,16 +126,8 @@ public class beEnemy : MonoBehaviour
     {
         rb.velocity = new Vector2(0, rb.velocity.y);
     }
+    
+   
 
-    private void Jump()
-    {
-        isJumping = true;
-        rb.AddForce(Vector2.up * 5f, ForceMode2D.Impulse);
-        Invoke("ResetJump", 1f);  // Prevent constant jumping
-    }
-
-    private void ResetJump()
-    {
-        isJumping = false;
-    }
+   
 }

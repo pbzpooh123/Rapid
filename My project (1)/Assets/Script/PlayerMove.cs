@@ -9,9 +9,9 @@ public class PlayerMove : MonoBehaviour
     private bool canDash = true;
     private bool isDashing;
     private float dashPower = 20f;
-    private int dashDamage = 20;
+    private int dashDamage = 25;
     private float dashTime = 0.2f;
-    private float dashCooldown = 1f;
+    private float dashCooldown = 1.25f;
     public Transform attackpos;
     public float attackrange;
     public LayerMask enemy;

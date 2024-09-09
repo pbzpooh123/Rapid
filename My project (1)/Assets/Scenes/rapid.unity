@@ -606,6 +606,7 @@ MonoBehaviour:
   attackRange: 3
   jumpProbability: 0.05
   healthBar: {fileID: 944694933}
+  win: {fileID: 866000665}
   php: {fileID: 205175419}
   dam: 20
 --- !u!212 &414351297
@@ -984,6 +985,7 @@ GameObject:
   m_Component:
   - component: {fileID: 866000664}
   - component: {fileID: 866000663}
+  - component: {fileID: 866000665}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1019,6 +1021,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &866000665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 866000662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ef6f338ec14a9e4b92cccc6b3471057, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &944694933 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1761916246925434466, guid: 33a7d8e040c88ae489b7132ece4190d3, type: 3}

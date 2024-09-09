@@ -20,6 +20,8 @@ public class Enemy : MonoBehaviour
     private bool isJumping = false;
     public Image healthBar;
 
+    public Victory win;
+
     private Rigidbody2D rb;
     public Playerhp php;
     public int dam = 5;
@@ -45,6 +47,7 @@ public class Enemy : MonoBehaviour
     {
         GetComponent<Collider2D>().enabled = false;
         this.enabled = false;
+        win.Credits();
         Destroy(gameObject);
     }
 

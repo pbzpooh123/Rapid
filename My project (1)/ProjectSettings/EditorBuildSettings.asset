@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/rapid.unity
     guid: 0fd0f2d4a9615b847b9dbfb539246b42
+  - enabled: 1
+    path: Assets/Scenes/WinandEncredit.unity
+    guid: 8bf0efe675357b54980ee6f05b9e879e
   m_configObjects: {}

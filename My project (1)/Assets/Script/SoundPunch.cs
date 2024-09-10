@@ -12,13 +12,8 @@ public class SoundPunch : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
-    void Update()
+    public void pucnhsound()
     {
-        // ตรวจสอบเมื่อผู้เล่นคลิกซ้าย (Mouse Button 0 คือคลิกซ้าย)
-        if (Input.GetMouseButtonDown(0))
-        {
-            // เล่นเสียง
-            audioSource.Play();
-        }
+        audioSource.Play();
     }
 }

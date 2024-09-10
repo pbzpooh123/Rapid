@@ -16,6 +16,7 @@ public class PlayerMove : MonoBehaviour
     public float attackrange;
     public LayerMask enemy;
     [SerializeField] private Animator anim;
+    public SoundPunch pucnh;
 
     private void Awake()
     {
@@ -48,6 +49,8 @@ public class PlayerMove : MonoBehaviour
         {
             anim.SetTrigger("Attack");
             StartCoroutine(Dash());
+            pucnh.pucnhsound();
+            
         }
     }
 

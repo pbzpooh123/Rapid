@@ -15,12 +15,13 @@ public class PlayerMove : MonoBehaviour
     public Transform attackpos;
     public float attackrange;
     public LayerMask enemy;
+    [SerializeField] private Animator anim;
 
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
-
+        anim = GetComponent<Animator>();
         // Set Rigidbody to continuous collision detection
         body.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
     }
@@ -45,6 +46,7 @@ public class PlayerMove : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && canDash)
         {
+            anim.SetTrigger("Attack");
             StartCoroutine(Dash());
         }
     }
@@ -86,6 +88,7 @@ public class PlayerMove : MonoBehaviour
             {
                 thirdEnemyComponent.TakeDam(dashDamage);
             }
+            
         }
     }
 }

@@ -580,6 +580,7 @@ GameObject:
   - component: {fileID: 414351296}
   - component: {fileID: 414351300}
   - component: {fileID: 414351299}
+  - component: {fileID: 414351301}
   m_Layer: 6
   m_Name: Boss
   m_TagString: Enemy
@@ -599,13 +600,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2c1c74f983b8b9498cfc9640a57fae6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxhp: 300
+  maxhp: 150
   player: {fileID: 205175421}
   moveSpeed: 2
   detectionRange: 500
   attackRange: 3
-  jumpProbability: 0.05
   healthBar: {fileID: 944694933}
+  anim: {fileID: 414351301}
   win: {fileID: 866000665}
   php: {fileID: 205175419}
   dam: 20
@@ -708,7 +709,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.023670197, y: 0.09468603}
+  m_Offset: {x: -0.67097855, y: -0.10759771}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -719,7 +720,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.3545418, y: 5.5671988}
+  m_Size: {x: 1.0599251, y: 5.162631}
   m_EdgeRadius: 0
 --- !u!50 &414351300
 Rigidbody2D:
@@ -748,6 +749,27 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!95 &414351301
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 414351295}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b6ea9ce74d3e64f4b9cc0524dda6208a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &429792872
 GameObject:
   m_ObjectHideFlags: 0

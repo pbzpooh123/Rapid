@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour
     private bool isMovingBack = false;
     private bool isAttacking = false;
     public Image healthBar;
+    [SerializeField] private Animator anim;
 
     public Victory win;
 
@@ -28,12 +29,13 @@ public class Enemy : MonoBehaviour
     {
         curhp = maxhp;
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
     }
 
     public void TakeDam(int dam)
     {
         curhp -= dam;
-        healthBar.fillAmount = curhp / 300f;
+        healthBar.fillAmount = curhp / 150f;
 
         if (curhp <= 0)
         {
@@ -65,16 +67,19 @@ public class Enemy : MonoBehaviour
             if (distanceToPlayer <= attackRange)
             {
                 Attack();
+                anim.SetTrigger("attack");
             }
             else if (distanceToPlayer <= detectionRange)
             {
                 if (distanceToPlayer <= attackRange)
                 {
                     MoveBackwards();
+                    
                 }
                 else
                 {
                     MoveTowardsPlayer();
+                    anim.SetTrigger("walk");
                 }
             }
             else
@@ -90,6 +95,7 @@ public class Enemy : MonoBehaviour
         {
             Vector2 direction = (player.position - transform.position).normalized;
             rb.velocity = new Vector2(direction.x * moveSpeed, rb.velocity.y);
+           
         }
     }
 

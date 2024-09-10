@@ -155,6 +155,7 @@ MonoBehaviour:
   enemy:
     serializedVersion: 2
     m_Bits: 64
+  anim: {fileID: 2329619507263918567}
 --- !u!95 &2329619507263918567
 Animator:
   serializedVersion: 5
@@ -165,7 +166,7 @@ Animator:
   m_GameObject: {fileID: 4799970787509472531}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 1314c5cee522424448eb0e54bc8b86c3, type: 2}
+  m_Controller: {fileID: 9100000, guid: d62cbb6567fde8945a48913844da02c9, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
